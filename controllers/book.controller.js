@@ -37,3 +37,37 @@ exports.singleFetchBook = async (req, res) => {
   });
 };
 
+exports.deleteBook = async (req, res) => {
+  const { id } = req.params;
+  await books.destroy({
+    where: {
+      id,
+    },
+  });
+  res.status(200).json({
+    message: "book deleted successfully",
+  });
+};
+
+exports.editBook = async (req, res) => {
+  const { id } = req.params;
+  const { bookName, bookPrice, bookAuthor, bookGenre } = req.body;
+  await books.update(
+    {
+      bookName,
+      bookPrice,
+      bookAuthor,
+      bookGenre,
+    },
+    {
+      where: {
+        id,
+      },
+    }
+  );
+  const data = await books.findAll();
+  res.status(200).json({
+    message: "book updated successfully",
+    data,
+  });
+};
